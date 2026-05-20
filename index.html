@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Palette</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #ffffff;
+    font-family: 'Inter', sans-serif;
+    padding: 40px 24px;
+    color: #111;
+  }
+
+  h1 {
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+
+  .section {
+    margin-bottom: 36px;
+  }
+
+  .section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 8px;
+    padding-left: 2px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #bbb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.12s;
+  }
+
+  tbody tr:hover { background: #f9fafb; }
+
+  td {
+    padding: 10px 14px;
+    vertical-align: middle;
+    color: #111;
+  }
+
+  .td-swatch {
+    width: 48px;
+  }
+
+  .swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    border: 1px solid rgba(0,0,0,0.08);
+    display: inline-block;
+  }
+
+  .td-name {
+    font-weight: 500;
+    color: #111;
+    min-width: 160px;
+  }
+
+  .td-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #555;
+    min-width: 100px;
+  }
+
+  .copy-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #888;
+    background: none;
+    border: 1px solid #e5e7eb;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .copy-btn:hover { border-color: #aaa; color: #111; }
+  .copy-btn.copied { border-color: #48AA66; color: #48AA66; }
+
+  .delete-btn {
+    font-size: 10px;
+    color: #ccc;
+    background: none;
+    border: 1px solid #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-left: 4px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+
+  .delete-btn:hover { border-color: #ffaaaa; color: #e05555; }
+
+  /* Add row */
+  .add-section {
+    margin-top: 16px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  input {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    color: #111;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 7px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: #48AA66; }
+  input::placeholder { color: #bbb; }
+
+  .hex-input { width: 110px; font-family: 'JetBrains Mono', monospace; }
+  .name-input { flex: 1; }
+
+  .add-btn {
+    background: #48AA66;
+    border: none;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .add-btn:hover { opacity: 0.85; }
+
+  .error-msg {
+    font-size: 11px;
+    color: #e05555;
+    margin-left: 4px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<h1>Design System · Color Palette</h1>
+
+<div id="paletteContainer"></div>
+
+<div class="add-section">
+  <input class="hex-input" id="hexInput" type="text" placeholder="#RRGGBB" maxlength="7">
+  <input class="name-input" id="nameInput" type="text" placeholder="색상 이름 (예: Primary/Light)">
+  <button class="add-btn" onclick="addColor()">+ 추가</button>
+  <span class="error-msg" id="errorMsg">올바른 HEX 코드를 입력하세요</span>
+</div>
+
+<script>
+  const defaultColors = [
+    { group: 'Primary', colors: [
+      { name: 'Primary/Default',  hex: '#48AA66' },
+      { name: 'Primary/Light',    hex: '#8BBB9A' },
+      { name: 'Primary/Dark',     hex: '#3E8A56' },
+      { name: 'Background',       hex: '#F6FAF8' },
+      { name: 'Background/Dark',  hex: '#E9EEEB' },
+    ]},
+    { group: 'State', colors: [
+      { name: 'State/Error',      hex: '#FF0000' },
+      { name: 'State/Error/Dark', hex: '#DB0000' },
+      { name: 'State/Info',       hex: '#0063F7' },
+      { name: 'State/Success',    hex: '#48AA66' },
+    ]},
+    { group: 'Neutral', colors: [
+      { name: 'White',    hex: '#FFFFFF' },
+      { name: 'Grey/50',  hex: '#F9FAFB' },
+      { name: 'Grey/100', hex: '#F3F4F6' },
+      { name: 'Grey/200', hex: '#E5E7EB' },
+      { name: 'Grey/300', hex: '#D1D5DB' },
+      { name: 'Grey/400', hex: '#9CA3AF' },
+      { name: 'Grey/500', hex: '#6B7280' },
+      { name: 'Grey/600', hex: '#4B5563' },
+      { name: 'Grey/800', hex: '#1F2937' },
+      { name: 'Black',    hex: '#313131' },
+    ]},
+  ];
+
+  let data = JSON.parse(localStorage.getItem('palette_v3') || 'null') || defaultColors;
+
+  function save() { localStorage.setItem('palette_v3', JSON.stringify(data)); }
+
+  function render() {
+    const container = document.getElementById('paletteContainer');
+    container.innerHTML = data.map((section, si) => `
+      <div class="section">
+        <div class="section-title">${section.group}</div>
+        <table>
+          <thead>
+            <tr>
+              <th class="td-swatch"></th>
+              <th>이름</th>
+              <th>HEX</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${section.colors.map((c, ci) => `
+              <tr>
+                <td class="td-swatch"><span class="swatch" style="background:${c.hex}"></span></td>
+                <td class="td-name">${c.name}</td>
+                <td class="td-hex">${c.hex.toUpperCase()}</td>
+                <td>
+                  <button class="copy-btn" onclick="copyHex(this, '${c.hex}')">복사</button>
+                  <button class="delete-btn" onclick="removeColor(${si}, ${ci})">삭제</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `).join('');
+  }
+
+  function copyHex(btn, hex) {
+    navigator.clipboard.writeText(hex).then(() => {
+      btn.textContent = '완료!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  function removeColor(si, ci) {
+    data[si].colors.splice(ci, 1);
+    if (data[si].colors.length === 0) data.splice(si, 1);
+    save(); render();
+  }
+
+  function addColor() {
+    const hex = document.getElementById('hexInput').value.trim();
+    const name = document.getElementById('nameInput').value.trim() || hex;
+    const errorMsg = document.getElementById('errorMsg');
+
+    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+      errorMsg.style.display = 'inline';
+      document.getElementById('hexInput').style.borderColor = '#ffaaaa';
+      setTimeout(() => {
+        errorMsg.style.display = 'none';
+        document.getElementById('hexInput').style.borderColor = '';
+      }, 2000);
+      return;
+    }
+
+    const parts = name.split('/');
+    const groupName = parts.length > 1 ? parts[0] : 'Custom';
+    const existing = data.find(s => s.group === groupName);
+    if (existing) {
+      existing.colors.push({ name, hex });
+    } else {
+      data.push({ group: groupName, colors: [{ name, hex }] });
+    }
+
+    save(); render();
+    document.getElementById('hexInput').value = '';
+    document.getElementById('nameInput').value = '';
+  }
+
+  document.getElementById('hexInput').addEventListener('keydown', e => { if (e.key === 'Enter') addColor(); });
+
+  render();
+</script>
+</body>
+</html>
