@@ -12,131 +12,117 @@
   body {
     background: #ffffff;
     font-family: 'Inter', sans-serif;
-    padding: 40px 24px;
+    padding: 36px 28px;
     color: #111;
   }
 
   h1 {
-    font-size: 13px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #999;
-    margin-bottom: 32px;
-    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.01em;
+    color: #111;
+    margin-bottom: 28px;
+    font-weight: 600;
   }
 
   .section {
-    margin-bottom: 36px;
+    margin-bottom: 32px;
   }
 
   .section-title {
-    font-family: 'Inter', sans-serif;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #aaa;
-    margin-bottom: 8px;
-    padding-left: 2px;
+    margin-bottom: 12px;
   }
 
-  table {
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card {
+    width: 110px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .card-swatch {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
+    height: 72px;
+    position: relative;
   }
 
-  thead th {
-    text-align: left;
-    padding: 8px 14px;
+  .card-swatch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  }
+
+  .card-body {
+    padding: 8px 10px;
+    background: #fff;
+  }
+
+  .card-name {
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #bbb;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  tbody tr {
-    border-bottom: 1px solid #f3f4f6;
-    transition: background 0.12s;
-  }
-
-  tbody tr:hover { background: #f9fafb; }
-
-  td {
-    padding: 10px 14px;
-    vertical-align: middle;
     color: #111;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .td-swatch {
-    width: 48px;
-  }
-
-  .swatch {
-    width: 36px;
-    height: 36px;
-    border-radius: 7px;
-    border: 1px solid rgba(0,0,0,0.08);
-    display: inline-block;
-  }
-
-  .td-name {
-    font-weight: 500;
-    color: #111;
-    min-width: 160px;
-  }
-
-  .td-hex {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: #555;
-    min-width: 100px;
-  }
-
-  .copy-btn {
+  .card-hex {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.08em;
-    color: #888;
-    background: none;
+    color: #999;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .copy-btn, .delete-btn {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 3px 0;
+    cursor: pointer;
+    transition: all 0.15s;
     border: 1px solid #e5e7eb;
-    padding: 4px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-
-  .copy-btn:hover { border-color: #aaa; color: #111; }
-  .copy-btn.copied { border-color: #48AA66; color: #48AA66; }
-
-  .delete-btn {
-    font-size: 10px;
-    color: #ccc;
     background: none;
-    border: 1px solid #f0f0f0;
-    padding: 4px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.15s;
-    margin-left: 4px;
-    text-transform: uppercase;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.08em;
+    color: #aaa;
   }
 
   .delete-btn:hover { border-color: #ffaaaa; color: #e05555; }
 
   /* Add row */
   .add-section {
-    margin-top: 16px;
+    margin-top: 8px;
     padding-top: 20px;
     border-top: 1px solid #e5e7eb;
     display: flex;
     gap: 8px;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   input {
@@ -151,10 +137,10 @@
   }
 
   input:focus { border-color: #48AA66; }
-  input::placeholder { color: #bbb; }
+  input::placeholder { color: #ccc; }
 
   .hex-input { width: 110px; font-family: 'JetBrains Mono', monospace; }
-  .name-input { flex: 1; }
+  .name-input { flex: 1; min-width: 160px; }
 
   .add-btn {
     background: #48AA66;
@@ -175,15 +161,13 @@
   .error-msg {
     font-size: 11px;
     color: #e05555;
-    margin-left: 4px;
     display: none;
   }
 </style>
 </head>
 <body>
 
-<h1>Design System · Color Palette</h1>
-
+<h1>Color Palette</h1>
 <div id="paletteContainer"></div>
 
 <div class="add-section">
@@ -195,20 +179,20 @@
 
 <script>
   const defaultColors = [
-    { group: 'Primary', colors: [
-      { name: 'Primary/Default',  hex: '#48AA66' },
-      { name: 'Primary/Light',    hex: '#8BBB9A' },
-      { name: 'Primary/Dark',     hex: '#3E8A56' },
+    { group: 'Main Color', colors: [
+      { name: 'Default',          hex: '#48AA66' },
+      { name: 'Light',            hex: '#8BBB9A' },
+      { name: 'Dark',             hex: '#3E8A56' },
       { name: 'Background',       hex: '#F6FAF8' },
       { name: 'Background/Dark',  hex: '#E9EEEB' },
     ]},
-    { group: 'State', colors: [
-      { name: 'State/Error',      hex: '#FF0000' },
-      { name: 'State/Error/Dark', hex: '#DB0000' },
-      { name: 'State/Info',       hex: '#0063F7' },
-      { name: 'State/Success',    hex: '#48AA66' },
+    { group: 'State Color', colors: [
+      { name: 'Error',      hex: '#FF0000' },
+      { name: 'Error/Dark', hex: '#DB0000' },
+      { name: 'Info',       hex: '#0063F7' },
+      { name: 'Success',    hex: '#48AA66' },
     ]},
-    { group: 'Neutral', colors: [
+    { group: 'Grey Color', colors: [
       { name: 'White',    hex: '#FFFFFF' },
       { name: 'Grey/50',  hex: '#F9FAFB' },
       { name: 'Grey/100', hex: '#F3F4F6' },
@@ -222,38 +206,29 @@
     ]},
   ];
 
-  let data = JSON.parse(localStorage.getItem('palette_v3') || 'null') || defaultColors;
+  let data = JSON.parse(localStorage.getItem('palette_v4') || 'null') || defaultColors;
 
-  function save() { localStorage.setItem('palette_v3', JSON.stringify(data)); }
+  function save() { localStorage.setItem('palette_v4', JSON.stringify(data)); }
 
   function render() {
     const container = document.getElementById('paletteContainer');
     container.innerHTML = data.map((section, si) => `
       <div class="section">
         <div class="section-title">${section.group}</div>
-        <table>
-          <thead>
-            <tr>
-              <th class="td-swatch"></th>
-              <th>이름</th>
-              <th>HEX</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            ${section.colors.map((c, ci) => `
-              <tr>
-                <td class="td-swatch"><span class="swatch" style="background:${c.hex}"></span></td>
-                <td class="td-name">${c.name}</td>
-                <td class="td-hex">${c.hex.toUpperCase()}</td>
-                <td>
-                  <button class="copy-btn" onclick="copyHex(this, '${c.hex}')">복사</button>
-                  <button class="delete-btn" onclick="removeColor(${si}, ${ci})">삭제</button>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+        <div class="grid">
+          ${section.colors.map((c, ci) => `
+            <div class="card">
+              <div class="card-swatch" style="background:${c.hex}"></div>
+              <div class="card-body">
+                <div class="card-name">${c.name}</div>
+                <div class="card-hex">${c.hex.toUpperCase()}</div>
+                <div class="card-actions">
+                  <button class="delete-btn" onclick="removeColor(${si},${ci})">삭제</button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
       </div>
     `).join('');
   }
@@ -280,10 +255,7 @@
     if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
       errorMsg.style.display = 'inline';
       document.getElementById('hexInput').style.borderColor = '#ffaaaa';
-      setTimeout(() => {
-        errorMsg.style.display = 'none';
-        document.getElementById('hexInput').style.borderColor = '';
-      }, 2000);
+      setTimeout(() => { errorMsg.style.display = 'none'; document.getElementById('hexInput').style.borderColor = ''; }, 2000);
       return;
     }
 
@@ -291,9 +263,9 @@
     const groupName = parts.length > 1 ? parts[0] : 'Custom';
     const existing = data.find(s => s.group === groupName);
     if (existing) {
-      existing.colors.push({ name, hex });
+      existing.colors.push({ name: parts.slice(1).join('/') || name, hex });
     } else {
-      data.push({ group: groupName, colors: [{ name, hex }] });
+      data.push({ group: groupName, colors: [{ name: parts.slice(1).join('/') || name, hex }] });
     }
 
     save(); render();
